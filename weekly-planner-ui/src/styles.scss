@@ -1,0 +1,63 @@
+@use '@angular/material' as mat;
+
+// ── Define dark theme ────────────────────────────────────────────────────────
+$dark-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$azure-palette,
+    tertiary: mat.$blue-palette,
+  ),
+  typography: (
+    brand-family: 'Roboto, sans-serif',
+    bold-weight: 700
+  ),
+  density: (scale: 0)
+));
+
+// Apply dark theme globally
+html {
+  @include mat.all-component-themes($dark-theme);
+  @include mat.color-variants-backwards-compatibility($dark-theme);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  background-color: #121212;
+  color: #e0e0e0;
+}
+
+// ── Custom color variables ────────────────────────────────────────────────────
+:root {
+  --color-client: #2196F3;
+  --color-techdebt: #FF9800;
+  --color-rnd: #4CAF50;
+  --color-surface: #1e1e1e;
+  --color-surface-2: #2a2a2a;
+  --color-border: #333;
+}
+
+// ── Category chips ────────────────────────────────────────────────────────────
+.chip-client   { background: rgba(33,150,243,0.2) !important; color: #64B5F6 !important; }
+.chip-techdebt { background: rgba(255,152,0,0.2)  !important; color: #FFB74D !important; }
+.chip-rnd      { background: rgba(76,175,80,0.2)  !important; color: #81C784 !important; }
+
+// ── Status chips ──────────────────────────────────────────────────────────────
+.chip-done     { background: rgba(76,175,80,0.2)   !important; color: #81C784 !important; }
+.chip-blocked  { background: rgba(244,67,54,0.2)   !important; color: #EF9A9A !important; }
+.chip-progress { background: rgba(33,150,243,0.2)  !important; color: #64B5F6 !important; }
+.chip-notstart { background: rgba(158,158,158,0.2) !important; color: #BDBDBD !important; }
+
+// ── Cards & panels ────────────────────────────────────────────────────────────
+mat-card { background: var(--color-surface) !important; }
+
+// ── Tables ───────────────────────────────────────────────────────────────────
+.mat-mdc-table { background: var(--color-surface) !important; }
+.mat-mdc-row:hover { background: var(--color-surface-2) !important; }
+
+// ── Utility ───────────────────────────────────────────────────────────────────
+.page-container { padding: 24px; max-width: 1200px; margin: 0 auto; }
+.spacer { flex: 1 1 auto; }
+.full-width { width: 100%; }
