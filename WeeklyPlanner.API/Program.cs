@@ -13,7 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 // ── Services (Dependency Injection) ───────────────────────
 builder.Services.AddScoped<ITeamMemberService, TeamMemberService>();
-// builder.Services.AddScoped<IBacklogService, BacklogService>();
+builder.Services.AddScoped<IBacklogService, BacklogService>();
 
 // ── Validation ────────────────────────────────────────────
 builder.Services.AddFluentValidationAutoValidation();
