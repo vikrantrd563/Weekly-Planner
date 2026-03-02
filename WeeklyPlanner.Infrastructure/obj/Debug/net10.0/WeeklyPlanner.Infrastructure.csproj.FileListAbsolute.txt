@@ -15,3 +15,4 @@ C:\Users\vikra\OneDrive\Desktop\ThinkBridge\Week7Lab\Weekly-Planner\WeeklyPlanne
 C:\Users\vikra\OneDrive\Desktop\ThinkBridge\Week7Lab\Weekly-Planner\WeeklyPlanner.Infrastructure\obj\Debug\net10.0\ref\WeeklyPlanner.Infrastructure.dll
 C:\Users\vikra\OneDrive\Desktop\ThinkBridge\Week7Lab\Weekly-Planner\WeeklyPlanner.Infrastructure\bin\Debug\net10.0\WeeklyPlanner.Infrastructure.runtimeconfig.json
 C:\Users\vikra\OneDrive\Desktop\ThinkBridge\Week7Lab\Weekly-Planner\WeeklyPlanner.Infrastructure\obj\Debug\net10.0\WeeklyPlanner.Infrastructure.genruntimeconfig.cache
+C:\Users\vikra\OneDrive\Desktop\ThinkBridge\Week7Lab\Weekly-Planner\WeeklyPlanner.Infrastructure\obj\Debug\net10.0\WeeklyPlanner.Infrastructure.sourcelink.json

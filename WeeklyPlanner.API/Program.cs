@@ -1,9 +1,9 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
-// using WeeklyPlanner.Application.Interfaces;
+using WeeklyPlanner.Application.Interfaces;
 using WeeklyPlanner.Infrastructure.Data;
-// using WeeklyPlanner.Infrastructure.Services;
+using WeeklyPlanner.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +12,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ── Services (Dependency Injection) ───────────────────────
-// builder.Services.AddScoped<ITeamMemberService, TeamMemberService>();
+builder.Services.AddScoped<ITeamMemberService, TeamMemberService>();
 // builder.Services.AddScoped<IBacklogService, BacklogService>();
 
 // ── Validation ────────────────────────────────────────────
