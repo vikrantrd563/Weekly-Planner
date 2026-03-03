@@ -1,0 +1,105 @@
+<div class="page-container">
+  @if (loading) {
+    <mat-spinner diameter="40" />
+  } @else if (!week) {
+    <mat-card>
+      <mat-card-content>
+        <p>No active planning week. Ask your lead to set one up.</p>
+        <button mat-button (click)="router.navigate(['/'])">Go Home</button>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <!-- Budget Overview -->
+    <mat-card style="margin-bottom:16px">
+      <mat-card-header>
+        <mat-card-title>My Planning — Week of {{ week.planningDate | date:'mediumDate' }}</mat-card-title>
+        <mat-card-subtitle>Total committed: {{ totalCommitted }}/30 hours</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:8px">
+          <div>
+            <span class="chip-client" style="padding:4px 8px;border-radius:4px">Client Focused</span>
+            <span style="margin-left:8px">{{ clientUsed }}/{{ clientBudget }}h</span>
+          </div>
+          <div>
+            <span class="chip-techdebt" style="padding:4px 8px;border-radius:4px">Tech Debt</span>
+            <span style="margin-left:8px">{{ techUsed }}/{{ techBudget }}h</span>
+          </div>
+          <div>
+            <span class="chip-rnd" style="padding:4px 8px;border-radius:4px">R&D</span>
+            <span style="margin-left:8px">{{ rndUsed }}/{{ rndBudget }}h</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Add Item -->
+    <mat-card style="margin-bottom:16px">
+      <mat-card-header>
+        <mat-card-title>Add Backlog Item</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:8px">
+          <mat-form-field style="min-width:300px">
+            <mat-label>Select Backlog Item</mat-label>
+            <mat-select [(ngModel)]="selectedBacklogId">
+              @for (item of availableBacklog; track item.id) {
+                <mat-option [value]="item.id">
+                  {{ item.title }} ({{ item.category }}, {{ item.estimatedHours }}h est.)
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field style="width:120px">
+            <mat-label>Hours</mat-label>
+            <input matInput type="number" [(ngModel)]="committedHours" min="1" max="30" />
+          </mat-form-field>
+
+          <button mat-raised-button color="primary"
+            [disabled]="!selectedBacklogId || committedHours < 1 || submitting"
+            (click)="addItem()">
+            Add
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- My Items -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>My Committed Items</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @if (myWorkItems.length === 0) {
+          <p style="color:#aaa">No items added yet. Add items above.</p>
+        } @else {
+          @for (item of myWorkItems; track item.id) {
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #333">
+              <div>
+                <span [class]="getCategoryClass(item.categoryId)"
+                  style="padding:2px 8px;border-radius:4px;font-size:12px;margin-right:8px">
+                  {{ item.category }}
+                </span>
+                <span>{{ item.backlogItemTitle }}</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="color:#aaa">{{ item.committedHours }}h</span>
+                <button mat-icon-button color="warn" (click)="removeItem(item.id)"
+                  style="font-size:12px">✕</button>
+              </div>
+            </div>
+          }
+        }
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="accent"
+          [disabled]="!canMarkReady"
+          (click)="markReady()">
+          ✓ Mark Ready ({{ totalCommitted }}/30h)
+        </button>
+        <button mat-button (click)="router.navigate(['/member-home', memberId])">Back</button>
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>

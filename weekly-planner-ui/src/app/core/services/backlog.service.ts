@@ -5,13 +5,12 @@ import { BacklogItem } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class BacklogService {
-
   private api = inject(ApiService);
+  private base = '/BacklogItems';
 
-  private base = '/BacklogItems';   // ✅ FIXED (no dash, PascalCase)
-
-  getAll(): Observable<BacklogItem[]> {
-    return this.api.get<BacklogItem[]>(this.base);
+  getAll(status?: string): Observable<BacklogItem[]> {
+    const params = status ? { status } : undefined;
+    return this.api.get<BacklogItem[]>(this.base, params);
   }
 
   getById(id: string): Observable<BacklogItem> {
