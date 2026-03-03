@@ -1,0 +1,79 @@
+<div class="page-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Setup Planning Week</mat-card-title>
+      <mat-card-subtitle>Lead only — create and open a new planning week</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (loading) {
+        <mat-spinner diameter="40" />
+      } @else {
+
+        <!-- Date -->
+        <div style="margin: 16px 0">
+          <label style="display:block;margin-bottom:8px;color:#aaa">Planning Date (must be a Tuesday)</label>
+          <input type="date" [(ngModel)]="planningDate"
+            style="background:#2a2a2a;color:#e0e0e0;border:1px solid #444;padding:8px;border-radius:4px;width:200px" />
+          @if (planningDate && !isTuesday(planningDate)) {
+            <span style="color:#ef5350;margin-left:12px">⚠ Must be a Tuesday</span>
+          }
+        </div>
+
+        <!-- Members -->
+        <div style="margin: 16px 0">
+          <label style="display:block;margin-bottom:8px;color:#aaa">Participating Members</label>
+          @for (member of members; track member.id) {
+            <div>
+              <mat-checkbox
+                [checked]="isMemberSelected(member.id)"
+                (change)="toggleMember(member.id)"
+                style="margin-bottom:4px">
+                {{ member.name }} @if (member.isLead) { <span style="color:#64B5F6">(Lead)</span> }
+              </mat-checkbox>
+            </div>
+          }
+        </div>
+
+        <!-- Sliders -->
+        <div style="margin: 16px 0">
+          <label style="display:block;margin-bottom:12px;color:#aaa">Category Budget Allocation</label>
+
+          <div style="margin-bottom:12px">
+            <span style="color:#64B5F6">Client Focused: {{ clientPct }}%</span>
+            <mat-slider min="0" max="100" step="5" style="width:100%">
+              <input matSliderThumb [(ngModel)]="clientPct" />
+            </mat-slider>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <span style="color:#FFB74D">Tech Debt: {{ techPct }}%</span>
+            <mat-slider min="0" max="100" step="5" style="width:100%">
+              <input matSliderThumb [(ngModel)]="techPct" />
+            </mat-slider>
+          </div>
+
+          <div style="margin-bottom:12px">
+            <span style="color:#81C784">R&D: {{ rndPct }}%</span>
+            <mat-slider min="0" max="100" step="5" style="width:100%">
+              <input matSliderThumb [(ngModel)]="rndPct" />
+            </mat-slider>
+          </div>
+
+          <div [style.color]="totalValid ? '#81C784' : '#ef5350'" style="font-weight:bold;font-size:16px">
+            Total: {{ total }}% {{ totalValid ? '✓' : '— must equal 100%' }}
+          </div>
+        </div>
+      }
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-raised-button color="primary"
+        [disabled]="!canSubmit"
+        (click)="submit()">
+        {{ submitting ? 'Creating...' : 'Create & Open Week' }}
+      </button>
+      <button mat-button (click)="router.navigate(['/lead-home'])">Cancel</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -32,6 +32,11 @@ import { UserSessionService } from '../../core/services/user-session.service';
             <p style="color:#aaa; font-size:14px;">Create a new planning week</p>
           </mat-card>
 
+          <mat-card style="padding:20px; cursor:pointer;" (click)="go('/week/review')">
+            <h3>🔍 Review & Freeze</h3>
+            <p style="color:#aaa; font-size:14px;">Review plans and freeze the week</p>
+          </mat-card>
+
           <mat-card style="padding:20px; cursor:pointer;" (click)="go('/week/dashboard')">
             <h3>📊 Team Dashboard</h3>
             <p style="color:#aaa; font-size:14px;">View team progress and KPIs</p>
