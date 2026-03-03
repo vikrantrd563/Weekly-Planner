@@ -7,27 +7,29 @@ import { TeamMember } from '../models';
 export class TeamMemberService {
   private api = inject(ApiService);
 
+  private base = '/TeamMembers';   // ✅ FIXED
+
   getAll(): Observable<TeamMember[]> {
-    return this.api.get<TeamMember[]>('/team-members');
+    return this.api.get<TeamMember[]>(this.base);
   }
 
   getById(id: string): Observable<TeamMember> {
-    return this.api.get<TeamMember>(`/team-members/${id}`);
+    return this.api.get<TeamMember>(`${this.base}/${id}`);
   }
 
   create(name: string, isLead = false): Observable<TeamMember> {
-    return this.api.post<TeamMember>('/team-members', { name, isLead });
+    return this.api.post<TeamMember>(this.base, { name, isLead });
   }
 
   update(id: string, changes: Partial<TeamMember>): Observable<TeamMember> {
-    return this.api.put<TeamMember>(`/team-members/${id}`, changes);
+    return this.api.put<TeamMember>(`${this.base}/${id}`, changes);
   }
 
   setLead(id: string): Observable<void> {
-    return this.api.patch<void>(`/team-members/${id}/lead`);
+    return this.api.patch<void>(`${this.base}/${id}/lead`);
   }
 
   toggleActive(id: string): Observable<void> {
-    return this.api.patch<void>(`/team-members/${id}/toggle-active`);
+    return this.api.patch<void>(`${this.base}/${id}/toggle-active`);
   }
 }

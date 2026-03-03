@@ -6,7 +6,7 @@ using WeeklyPlanner.Application.Models;
 namespace WeeklyPlanner.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/BacklogItems")]
 public class BacklogItemsController : ControllerBase
 {
     private readonly IBacklogService _service;

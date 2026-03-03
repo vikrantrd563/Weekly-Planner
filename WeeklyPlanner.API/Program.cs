@@ -14,6 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 // ── Services (Dependency Injection) ───────────────────────
 builder.Services.AddScoped<ITeamMemberService, TeamMemberService>();
 builder.Services.AddScoped<IBacklogService, BacklogService>();
+builder.Services.AddScoped<IPlanningService, PlanningService>();
+builder.Services.AddScoped<IWorkItemService, WorkItemService>();
 
 // ── Validation ────────────────────────────────────────────
 builder.Services.AddFluentValidationAutoValidation();

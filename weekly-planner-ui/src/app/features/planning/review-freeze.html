@@ -1,0 +1,127 @@
+<div class="page-container" style="max-width:800px; margin:40px auto;">
+
+  @if (loading) {
+    <div style="text-align:center; padding:60px;">
+      <mat-spinner style="margin:0 auto;"></mat-spinner>
+    </div>
+  }
+
+  @if (!loading && week) {
+    <mat-card style="padding:32px;">
+      
+      <h2>🔍 Review & Freeze Week</h2>
+      <p style="color:#aaa;">
+        Planning week of {{ week.planningDate | date:'MMMM d, y' }}
+        — Status: <strong>{{ week.status }}</strong>
+      </p>
+
+      <!-- Category Budgets -->
+      <mat-card style="padding:16px; margin-bottom:24px; background:#2a2a2a;">
+        <h3 style="margin:0 0 12px 0;">Category Budgets (per member)</h3>
+
+        <div style="display:flex; gap:24px; flex-wrap:wrap;">
+
+          <span class="chip-client" style="padding:6px 12px; border-radius:16px;">
+            Client Focused: {{ week.clientFocusedPct }}%
+            ({{ clientTotal / week.members.length | number:'1.0-0' }}h each)
+          </span>
+
+          <span class="chip-techdebt" style="padding:6px 12px; border-radius:16px;">
+            Tech Debt: {{ week.techDebtPct }}%
+            ({{ techTotal / week.members.length | number:'1.0-0' }}h each)
+          </span>
+
+          <span class="chip-rnd" style="padding:6px 12px; border-radius:16px;">
+            R&D: {{ week.rndPct }}%
+            ({{ rndTotal / week.members.length | number:'1.0-0' }}h each)
+          </span>
+
+        </div>
+      </mat-card>
+
+      <!-- Members -->
+      <h3>Team Members</h3>
+
+      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
+
+        @for (member of week.members; track member.memberId) {
+
+          <mat-card style="padding:16px; background:#2a2a2a;">
+
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+
+              <div>
+                <strong>{{ member.memberName }}</strong>
+
+                @if (member.isReady) {
+                  <span style="color:#81C784; margin-left:8px;">✅ Ready</span>
+                } @else {
+                  <span style="color:#BDBDBD; margin-left:8px;">⏳ Not Ready</span>
+                }
+              </div>
+
+              <div style="text-align:right;">
+                <span [style.color]="member.totalCommitted === 30 ? '#81C784' : '#EF9A9A'">
+                  {{ member.totalCommitted }}/30h
+                </span>
+              </div>
+
+            </div>
+
+            <div style="margin-top:8px; font-size:13px; color:#aaa;">
+              Client: {{ member.clientFocusedBudget }}h &nbsp;|&nbsp;
+              Tech Debt: {{ member.techDebtBudget }}h &nbsp;|&nbsp;
+              R&D: {{ member.rndBudget }}h
+            </div>
+
+          </mat-card>
+
+        }
+
+      </div>
+
+      <!-- Validation -->
+      @if (!canFreeze) {
+        <mat-card style="padding:16px;
+                         background:rgba(244,67,54,0.1);
+                         border:1px solid #EF9A9A;
+                         margin-bottom:16px;">
+          <p style="color:#EF9A9A; margin:0;">
+            ⚠️ Cannot freeze yet — all members must have exactly 30h planned.
+          </p>
+        </mat-card>
+      }
+
+      <!-- Actions -->
+      <div style="display:flex; gap:12px; margin-top:8px;">
+
+        <button mat-raised-button
+                color="primary"
+                [disabled]="!canFreeze || freezing"
+                (click)="freeze()">
+
+          @if (freezing) {
+            Freezing...
+          } @else {
+            🔒 Freeze Week
+          }
+
+        </button>
+
+        <button mat-stroked-button
+                color="warn"
+                (click)="cancel()">
+          ❌ Cancel Week
+        </button>
+
+        <button mat-button
+                (click)="router.navigate(['/lead-home'])">
+          ← Back
+        </button>
+
+      </div>
+
+    </mat-card>
+  }
+
+</div>

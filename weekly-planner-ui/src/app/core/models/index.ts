@@ -42,7 +42,7 @@ export interface PlanningWeek {
   statusId: number;
   clientFocusedPct: number;
   techDebtPct: number;
-  rndPct: number;
+  rndPct: number; // ✅ clean name
   createdAt: string;
   members: PlanningWeekMemberInfo[];
 }
@@ -51,9 +51,11 @@ export interface PlanningWeekMemberInfo {
   memberId: string;
   memberName: string;
   isReady: boolean;
+
   clientFocusedBudget: number;
   techDebtBudget: number;
-  rndBudget: number;
+  rndBudget: number; // ✅ clean name
+
   totalCommitted: number;
 }
 
