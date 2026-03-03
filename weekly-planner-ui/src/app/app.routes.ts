@@ -7,6 +7,11 @@ export const routes: Routes = [
       import('./features/team/team').then(m => m.Team)
   },
   {
+    path: 'backlog',
+    loadComponent: () =>
+      import('./features/backlog/backlog').then(m => m.Backlog)
+  },
+  {
     path: '',
     redirectTo: 'team',
     pathMatch: 'full'

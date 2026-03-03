@@ -1,0 +1,34 @@
+<div class="page-container">
+  <mat-card>
+    <h2>Backlog</h2>
+
+    <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap: wrap;">
+      <input matInput placeholder="Title" [(ngModel)]="title" />
+      <input matInput placeholder="Description" [(ngModel)]="description" />
+
+      <mat-select [(ngModel)]="category">
+        <mat-option [value]="1">Client Focused</mat-option>
+        <mat-option [value]="2">Tech Debt</mat-option>
+        <mat-option [value]="3">R&D</mat-option>
+      </mat-select>
+
+      <button mat-raised-button color="primary" (click)="add()">Add</button>
+    </div>
+
+    <div *ngFor="let item of items" style="margin-bottom:8px;">
+      <mat-card>
+        <b>{{ item.title }}</b>
+        <div>{{ item.description }}</div>
+        <div>Category: {{ item.category }}</div>
+        <div>Status: {{ item.status }}</div>
+
+        <div style="margin-top:8px;">
+          <button mat-button color="warn" (click)="archive(item.id)">
+            Archive
+          </button>
+        </div>
+      </mat-card>
+    </div>
+
+  </mat-card>
+</div>
