@@ -1,0 +1,24 @@
+<div class="page-container">
+  <mat-card>
+    <h2>Team Members</h2>
+
+    <div style="display:flex; gap:8px; margin-bottom:16px;">
+      <input matInput placeholder="New member name" [(ngModel)]="newName" />
+      <button mat-raised-button color="primary" (click)="add()">Add</button>
+    </div>
+
+    <div *ngFor="let member of members" style="margin-bottom:8px;">
+      <mat-card>
+        <b>{{ member.name }}</b>
+        <span *ngIf="member.isLead"> ⭐ Lead</span>
+        <span *ngIf="!member.isActive"> (Inactive)</span>
+
+        <div style="margin-top:8px;">
+          <button mat-button (click)="setLead(member.id)">Set Lead</button>
+          <button mat-button (click)="toggle(member.id)">Toggle Active</button>
+        </div>
+      </mat-card>
+    </div>
+
+  </mat-card>
+</div>
