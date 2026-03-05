@@ -16,6 +16,8 @@ builder.Services.AddScoped<ITeamMemberService, TeamMemberService>();
 builder.Services.AddScoped<IBacklogService, BacklogService>();
 builder.Services.AddScoped<IPlanningService, PlanningService>();
 builder.Services.AddScoped<IWorkItemService, WorkItemService>();
+builder.Services.AddScoped<IProgressService, ProgressService>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 // ── Validation ────────────────────────────────────────────
 builder.Services.AddFluentValidationAutoValidation();
