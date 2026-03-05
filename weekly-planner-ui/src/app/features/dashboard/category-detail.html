@@ -1,0 +1,77 @@
+<div class="page-container">
+  @if (loading) {
+    <div style="text-align:center;padding:60px">
+      <mat-spinner diameter="40" style="margin:0 auto"></mat-spinner>
+    </div>
+  } @else if (!data) {
+    <mat-card>
+      <mat-card-content>
+        <p>No data found.</p>
+        <button mat-button (click)="router.navigate(['/dashboard', weekId])">Back</button>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+
+    <mat-card style="margin-bottom:16px">
+      <mat-card-header>
+        <mat-card-title>{{ data.category }} — Category Detail</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:16px">
+
+          <div style="text-align:center;min-width:120px">
+            <div [style.color]="getCompletionColor(data.completionPct)"
+              style="font-size:36px;font-weight:bold">
+              {{ data.completionPct }}%
+            </div>
+            <div style="color:#aaa;font-size:13px">Completion</div>
+          </div>
+
+          <div style="text-align:center;min-width:120px">
+            <div style="font-size:24px;font-weight:bold;color:#64B5F6">
+              {{ data.completedHours }}/{{ data.committedHours }}h
+            </div>
+            <div style="color:#aaa;font-size:13px">Hours</div>
+          </div>
+
+          <div style="text-align:center;min-width:120px">
+            <div style="font-size:36px;font-weight:bold;color:#81C784">
+              {{ data.doneCount }}/{{ data.taskCount }}
+            </div>
+            <div style="color:#aaa;font-size:13px">Tasks Done</div>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Task List -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Tasks</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @for (task of data.tasks; track task.workItemId) {
+          <div style="display:flex;justify-content:space-between;align-items:center;
+            padding:12px 0;border-bottom:1px solid #333">
+            <div>
+              <strong>{{ task.backlogItemTitle }}</strong>
+            </div>
+            <div style="display:flex;gap:16px;align-items:center">
+              <span style="color:#aaa;font-size:13px">
+                {{ task.completedHours }}/{{ task.committedHours }}h
+              </span>
+              <span [style.color]="getStatusColor(task.status)"
+                style="font-size:13px;font-weight:bold">
+                {{ task.status }}
+              </span>
+            </div>
+          </div>
+        }
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="router.navigate(['/dashboard', weekId])">Back to Dashboard</button>
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>

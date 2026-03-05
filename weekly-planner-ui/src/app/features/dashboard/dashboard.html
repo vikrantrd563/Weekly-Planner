@@ -1,0 +1,122 @@
+<div class="page-container">
+  @if (loading) {
+    <div style="text-align:center;padding:60px">
+      <mat-spinner diameter="40" style="margin:0 auto"></mat-spinner>
+    </div>
+  } @else if (!dashboard) {
+    <mat-card>
+      <mat-card-content>
+        <p>No dashboard data available.</p>
+        <button mat-button (click)="router.navigate(['/lead-home'])">Back</button>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+
+    <!-- Overall KPIs -->
+    <mat-card style="margin-bottom:16px">
+      <mat-card-header>
+        <mat-card-title>Team Dashboard — Week of {{ dashboard.planningDate | date:'mediumDate' }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:16px">
+
+          <div style="text-align:center;min-width:120px">
+            <div [style.color]="getCompletionColor(dashboard.overallCompletionPct)"
+              style="font-size:36px;font-weight:bold">
+              {{ dashboard.overallCompletionPct }}%
+            </div>
+            <div style="color:#aaa;font-size:13px">Overall Completion</div>
+          </div>
+
+          <div style="text-align:center;min-width:120px">
+            <div style="font-size:36px;font-weight:bold;color:#81C784">
+              {{ dashboard.totalTasksDone }}
+            </div>
+            <div style="color:#aaa;font-size:13px">Tasks Done</div>
+          </div>
+
+          <div style="text-align:center;min-width:120px">
+            <div style="font-size:36px;font-weight:bold;color:#EF9A9A">
+              {{ dashboard.totalTasksBlocked }}
+            </div>
+            <div style="color:#aaa;font-size:13px">Tasks Blocked</div>
+          </div>
+
+          <div style="text-align:center;min-width:120px">
+            <div style="font-size:36px;font-weight:bold;color:#e0e0e0">
+              {{ dashboard.totalTasks }}
+            </div>
+            <div style="color:#aaa;font-size:13px">Total Tasks</div>
+          </div>
+
+          <div style="text-align:center;min-width:120px">
+            <div style="font-size:24px;font-weight:bold;color:#64B5F6">
+              {{ dashboard.overallCompletedHours }}/{{ dashboard.overallCommittedHours }}h
+            </div>
+            <div style="color:#aaa;font-size:13px">Hours</div>
+          </div>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Category Summaries -->
+    <mat-card style="margin-bottom:16px">
+      <mat-card-header>
+        <mat-card-title>By Category</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+          @for (cat of dashboard.categorySummaries; track cat.categoryId) {
+            <mat-card style="flex:1;min-width:200px;background:#2a2a2a;cursor:pointer"
+              (click)="router.navigate(['/dashboard', weekId, 'category', cat.categoryId])">
+              <mat-card-content style="padding:16px">
+                <div style="font-weight:bold;margin-bottom:8px">{{ cat.category }}</div>
+                <div [style.color]="getCompletionColor(cat.completionPct)"
+                  style="font-size:24px;font-weight:bold">
+                  {{ cat.completionPct }}%
+                </div>
+                <div style="color:#aaa;font-size:13px">
+                  {{ cat.completedHours }}/{{ cat.committedHours }}h
+                  · {{ cat.doneCount }}/{{ cat.taskCount }} tasks
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Member Summaries -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>By Member</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        @for (member of dashboard.memberSummaries; track member.memberId) {
+          <div style="display:flex;justify-content:space-between;align-items:center;
+            padding:12px 0;border-bottom:1px solid #333;cursor:pointer"
+            (click)="router.navigate(['/dashboard', weekId, 'member', member.memberId])">
+            <div>
+              <strong>{{ member.memberName }}</strong>
+              <span style="color:#aaa;font-size:13px;margin-left:12px">
+                {{ member.completedHours }}/{{ member.committedHours }}h
+              </span>
+            </div>
+            <div style="display:flex;gap:16px;align-items:center">
+              <span style="color:#81C784">✓ {{ member.tasksDone }}</span>
+              <span style="color:#EF9A9A">✗ {{ member.tasksBlocked }}</span>
+              <span [style.color]="getCompletionColor(member.completionPct)"
+                style="font-weight:bold">
+                {{ member.completionPct }}%
+              </span>
+            </div>
+          </div>
+        }
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="router.navigate(['/lead-home'])">Back</button>
+      </mat-card-actions>
+    </mat-card>
+  }
+</div>
