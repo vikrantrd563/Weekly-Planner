@@ -1,0 +1,47 @@
+<div class="page-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Past Planning Weeks</mat-card-title>
+      <mat-card-subtitle>View history and dashboards of all weeks</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      @if (loading) {
+        <div style="text-align:center;padding:40px">
+          <mat-spinner diameter="40" style="margin:0 auto"></mat-spinner>
+        </div>
+      } @else if (weeks.length === 0) {
+        <p style="color:#aaa">No planning weeks found.</p>
+      } @else {
+        @for (week of weeks; track week.id) {
+          <div style="display:flex;justify-content:space-between;align-items:center;
+            padding:16px 0;border-bottom:1px solid #333">
+            <div>
+              <strong>Week of {{ week.planningDate | date:'mediumDate' }}</strong>
+              <div style="font-size:13px;color:#aaa;margin-top:4px">
+                {{ week.members.length }} members ·
+                Client {{ week.clientFocusedPct }}% ·
+                Tech {{ week.techDebtPct }}% ·
+                R&D {{ week.rndPct }}%
+              </div>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center">
+              <span [style.color]="getStatusColor(week.status)"
+                style="font-weight:bold;font-size:13px">
+                {{ week.status }}
+              </span>
+              <button mat-stroked-button
+                (click)="viewDashboard(week.id)">
+                View Dashboard
+              </button>
+            </div>
+          </div>
+        }
+      }
+    </mat-card-content>
+
+    <mat-card-actions>
+      <button mat-button (click)="router.navigate(['/lead-home'])">Back</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

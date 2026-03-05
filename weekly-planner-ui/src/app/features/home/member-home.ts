@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { UserSessionService } from '../../core/services/user-session.service';
+import { PlanningService } from '../../core/services/planning.service';
 
 @Component({
   selector: 'app-member-home',
@@ -14,7 +15,6 @@ import { UserSessionService } from '../../core/services/user-session.service';
       <mat-card style="padding:32px;">
         <h2>👋 Welcome, {{ session.currentUser?.name }}</h2>
         <p style="color:#aaa;">Team Member</p>
-
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:24px;">
 
           <mat-card style="padding:20px; cursor:pointer;"
@@ -24,7 +24,7 @@ import { UserSessionService } from '../../core/services/user-session.service';
           </mat-card>
 
           <mat-card style="padding:20px; cursor:pointer;"
-            (click)="go('/week/progress/' + memberId)">
+            (click)="go('/progress/' + memberId)">
             <h3>✅ Update Progress</h3>
             <p style="color:#aaa; font-size:14px;">Log hours and update task status</p>
           </mat-card>
@@ -34,9 +34,14 @@ import { UserSessionService } from '../../core/services/user-session.service';
             <p style="color:#aaa; font-size:14px;">Browse all backlog items</p>
           </mat-card>
 
-          <mat-card style="padding:20px; cursor:pointer;" (click)="go('/week/dashboard')">
+          <mat-card style="padding:20px; cursor:pointer;" (click)="goToDashboard()">
             <h3>📊 Team Dashboard</h3>
             <p style="color:#aaa; font-size:14px;">View team progress</p>
+          </mat-card>
+
+          <mat-card style="padding:20px; cursor:pointer;" (click)="go('/past-weeks')">
+            <h3>📁 Past Weeks</h3>
+            <p style="color:#aaa; font-size:14px;">View history of completed weeks</p>
           </mat-card>
 
         </div>
@@ -48,7 +53,7 @@ export class MemberHome implements OnInit {
   session = inject(UserSessionService);
   private router = inject(Router);
   private route = inject(ActivatedRoute);
-
+  private planningService = inject(PlanningService);
   memberId = '';
 
   ngOnInit(): void {
@@ -61,5 +66,16 @@ export class MemberHome implements OnInit {
 
   go(path: string): void {
     this.router.navigate([path]);
+  }
+
+  goToDashboard(): void {
+    this.planningService.getActive().subscribe({
+      next: (week: any) => {
+        this.router.navigate(['/dashboard', week.id]);
+      },
+      error: () => {
+        this.router.navigate(['/past-weeks']);
+      }
+    });
   }
 }
