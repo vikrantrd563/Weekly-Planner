@@ -1,89 +1,80 @@
-<div class="page-container">
+<div style="max-width:800px;margin:40px auto;padding:0 24px;">
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+    <button (click)="router.navigate(['/dashboard', weekId])"
+      style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px;">
+      Back to Dashboard
+    </button>
+  </div>
+
   @if (loading) {
-    <div style="text-align:center;padding:60px">
-      <mat-spinner diameter="40" style="margin:0 auto"></mat-spinner>
+    <p style="color:#94a3b8;">Loading...</p>
+  } @else if (data) {
+
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:24px;margin-bottom:24px;">
+      <h2 style="margin:0 0 4px 0;">{{ data.memberName }}</h2>
+      <p style="color:#94a3b8;margin:0;">Member progress summary</p>
     </div>
-  } @else if (!data) {
-    <mat-card>
-      <mat-card-content>
-        <p>No data found.</p>
-        <button mat-button (click)="router.navigate(['/dashboard', weekId])">Back</button>
-      </mat-card-content>
-    </mat-card>
-  } @else {
 
-    <mat-card style="margin-bottom:16px">
-      <mat-card-header>
-        <mat-card-title>{{ data.memberName }} — Progress Detail</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:16px">
-
-          <div style="text-align:center;min-width:120px">
-            <div [style.color]="getCompletionColor(data.completionPct)"
-              style="font-size:36px;font-weight:bold">
-              {{ data.completionPct }}%
-            </div>
-            <div style="color:#aaa;font-size:13px">Completion</div>
-          </div>
-
-          <div style="text-align:center;min-width:120px">
-            <div style="font-size:24px;font-weight:bold;color:#64B5F6">
-              {{ data.completedHours }}/{{ data.committedHours }}h
-            </div>
-            <div style="color:#aaa;font-size:13px">Hours</div>
-          </div>
-
-          <div style="text-align:center;min-width:120px">
-            <div style="font-size:36px;font-weight:bold;color:#81C784">
-              {{ data.tasksDone }}
-            </div>
-            <div style="color:#aaa;font-size:13px">Done</div>
-          </div>
-
-          <div style="text-align:center;min-width:120px">
-            <div style="font-size:36px;font-weight:bold;color:#EF9A9A">
-              {{ data.tasksBlocked }}
-            </div>
-            <div style="color:#aaa;font-size:13px">Blocked</div>
-          </div>
-
+    <!-- Stat Boxes -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px;">
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#64B5F6;">{{ data.committedHours }}h</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Committed</div>
+      </div>
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#81C784;">{{ data.completedHours }}h</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Completed</div>
+      </div>
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;"
+          [style.color]="getCompletionColor(data.completionPct)">
+          {{ data.completionPct | number:'1.0-0' }}%
         </div>
-      </mat-card-content>
-    </mat-card>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Complete</div>
+      </div>
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#f1f5f9;">{{ data.tasks?.length ?? 0 }}</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Tasks</div>
+      </div>
+    </div>
 
-    <!-- Task List -->
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Tasks</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        @for (task of data.tasks; track task.workItemId) {
-          <div style="padding:12px 0;border-bottom:1px solid #333">
-            <div style="display:flex;justify-content:space-between;align-items:center">
-              <div>
+    <!-- Task Table -->
+    <div style="font-size:13px;font-weight:600;color:#64748b;text-transform:uppercase;
+                letter-spacing:0.05em;margin-bottom:12px;">Tasks</div>
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;overflow:hidden;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#252d3d;">
+            <th style="padding:10px 16px;text-align:left;font-size:13px;color:#94a3b8;">Task</th>
+            <th style="padding:10px 16px;text-align:left;font-size:13px;color:#94a3b8;">Category</th>
+            <th style="padding:10px 16px;text-align:right;font-size:13px;color:#94a3b8;">Committed</th>
+            <th style="padding:10px 16px;text-align:right;font-size:13px;color:#94a3b8;">Completed</th>
+            <th style="padding:10px 16px;text-align:center;font-size:13px;color:#94a3b8;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (task of data.tasks; track task.workItemId) {
+            <tr style="border-top:1px solid #2e3a4e;">
+              <td style="padding:10px 16px;font-weight:500;">{{ task.backlogItemTitle }}</td>
+              <td style="padding:10px 16px;">
                 <span [class]="getCategoryClass(task.category)"
-                  style="padding:2px 8px;border-radius:4px;font-size:12px;margin-right:8px">
+                  style="padding:2px 8px;border-radius:4px;font-size:12px;">
                   {{ task.category }}
                 </span>
-                <strong>{{ task.backlogItemTitle }}</strong>
-              </div>
-              <div style="display:flex;gap:16px;align-items:center">
-                <span style="color:#aaa;font-size:13px">
-                  {{ task.completedHours }}/{{ task.committedHours }}h
-                </span>
-                <span [style.color]="getStatusColor(task.status)"
-                  style="font-size:13px;font-weight:bold">
+              </td>
+              <td style="padding:10px 16px;text-align:right;">{{ task.committedHours }}h</td>
+              <td style="padding:10px 16px;text-align:right;">{{ task.completedHours }}h</td>
+              <td style="padding:10px 16px;text-align:center;">
+                <span [style.color]="getStatusColor(task.status)" style="font-size:13px;">
                   {{ task.status }}
                 </span>
-              </div>
-            </div>
-          </div>
-        }
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-button (click)="router.navigate(['/dashboard', weekId])">Back to Dashboard</button>
-      </mat-card-actions>
-    </mat-card>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
   }
 </div>

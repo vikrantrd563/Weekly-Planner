@@ -180,4 +180,11 @@ public class PlanningService : IPlanningService
         await _db.SaveChangesAsync();
         return true;
     }
+    public async Task<bool> ResetAllAsync()
+    {
+        var weeks = await _db.PlanningWeeks.ToListAsync();
+        _db.PlanningWeeks.RemoveRange(weeks);
+        await _db.SaveChangesAsync();
+        return true;
+    }
 }

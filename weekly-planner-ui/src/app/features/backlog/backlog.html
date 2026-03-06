@@ -1,34 +1,89 @@
 <div class="page-container">
-  <mat-card>
-    <h2>Backlog</h2>
 
-    <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap: wrap;">
-      <input matInput placeholder="Title" [(ngModel)]="title" />
-      <input matInput placeholder="Description" [(ngModel)]="description" />
+  <h2>Backlog</h2>
 
-      <mat-select [(ngModel)]="category">
-        <mat-option [value]="1">Client Focused</mat-option>
-        <mat-option [value]="2">Tech Debt</mat-option>
-        <mat-option [value]="3">R&D</mat-option>
-      </mat-select>
+  <div class="action-card">
 
-      <button mat-raised-button color="primary" (click)="add()">Add</button>
+    <h3>Add Backlog Item</h3>
+
+    <div class="form-row">
+
+      <input
+        type="text"
+        placeholder="Title"
+        [(ngModel)]="title"
+      />
+
+      <input
+        type="text"
+        placeholder="Description"
+        [(ngModel)]="description"
+      />
+
+      <select [(ngModel)]="category">
+        <option [value]="1">Client Focused</option>
+        <option [value]="2">Tech Debt</option>
+        <option [value]="3">R&amp;D</option>
+      </select>
+
+      <button class="primary" (click)="add()">Add</button>
+
     </div>
 
-    <div *ngFor="let item of items" style="margin-bottom:8px;">
-      <mat-card>
-        <b>{{ item.title }}</b>
-        <div>{{ item.description }}</div>
-        <div>Category: {{ item.category }}</div>
-        <div>Status: {{ item.status }}</div>
+  </div>
 
-        <div style="margin-top:8px;">
-          <button mat-button color="warn" (click)="archive(item.id)">
-            Archive
-          </button>
-        </div>
-      </mat-card>
-    </div>
 
-  </mat-card>
+  <div class="action-card">
+
+    <h3>Backlog Items</h3>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let item of items">
+
+          <td>{{ item.title }}</td>
+
+          <td>{{ item.description }}</td>
+
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'badge-client': item.category === 'ClientFocused',
+                'badge-tech': item.category === 'TechDebt',
+                'badge-rnd': item.category === 'RnD'
+              }"
+            >
+              {{ item.category }}
+            </span>
+          </td>
+
+          <td>{{ item.status }}</td>
+
+          <td>
+            <button class="danger" (click)="archive(item.id)">
+              Archive
+            </button>
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
 </div>

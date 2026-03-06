@@ -72,4 +72,11 @@ public class BacklogItemsController : ControllerBase
         Infrastructure.Data.SeedData.Seed(db);
         return Ok(new { message = "Sample data seeded successfully." });
     }
+    /// <summary>Delete all backlog items</summary>
+    [HttpDelete("reset-all")]
+    public async Task<IActionResult> ResetAll()
+    {
+        var success = await _service.ResetAllAsync();
+        return success ? Ok() : StatusCode(500);
+    }
 }

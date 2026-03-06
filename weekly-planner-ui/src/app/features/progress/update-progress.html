@@ -1,59 +1,58 @@
-<div class="page-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Update My Progress</mat-card-title>
-      <mat-card-subtitle>Update completed hours and status for each task</mat-card-subtitle>
-    </mat-card-header>
+<div class="page-container main-content">
 
-    <mat-card-content>
-      @if (loading) {
-        <div style="text-align:center;padding:40px">
-          <mat-spinner diameter="40" style="margin:0 auto"></mat-spinner>
-        </div>
-      } @else if (workItems.length === 0) {
-        <p style="color:#aaa">No work items found for this week.</p>
-      } @else {
-        @for (item of workItems; track item.workItemId) {
-          <div style="border:1px solid #333;border-radius:8px;padding:16px;margin-bottom:12px">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-              <div>
-                <span [class]="getCategoryClass(item.category)"
-                  style="padding:2px 8px;border-radius:4px;font-size:12px;margin-right:8px">
-                  {{ item.category }}
-                </span>
-                <strong>{{ item.backlogItemTitle }}</strong>
-              </div>
-              <span style="color:#aaa;font-size:13px">Committed: {{ item.committedHours }}h</span>
-            </div>
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <button (click)="router.navigate(['/member-home', memberId])"
+      style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px">Home</button>
+    <h2 style="margin:0"> Update My Progress</h2>
+  </div>
 
-            <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
-              <mat-form-field style="width:140px">
-                <mat-label>Completed Hours</mat-label>
-                <input matInput type="number" [(ngModel)]="item.editHours" min="0" />
-              </mat-form-field>
+  @if (loading) {
+    <p style="color:#94a3b8">Loading...</p>
+  } @else if (workItems.length === 0) {
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:24px;color:#94a3b8">
+      No work items found for this week.
+    </div>
+  } @else {
+    @for (item of workItems; track item.workItemId) {
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:20px;margin-bottom:12px">
 
-              <mat-form-field style="width:160px">
-                <mat-label>Status</mat-label>
-                <mat-select [(ngModel)]="item.editStatus">
-                  @for (s of statusOptions; track s.value) {
-                    <mat-option [value]="s.value">{{ s.label }}</mat-option>
-                  }
-                </mat-select>
-              </mat-form-field>
-
-              <button mat-raised-button color="primary"
-                [disabled]="saving"
-                (click)="saveProgress(item)">
-                Save
-              </button>
-            </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+          <div>
+            <span [class]="getCategoryClass(item.category)"
+              style="padding:2px 8px;border-radius:4px;font-size:12px;margin-right:8px">
+              {{ item.category }}
+            </span>
+            <strong style="font-size:15px">{{ item.backlogItemTitle }}</strong>
           </div>
-        }
-      }
-    </mat-card-content>
+          <span style="color:#94a3b8;font-size:13px">Committed: {{ item.committedHours }}h</span>
+        </div>
 
-    <mat-card-actions>
-      <button mat-button (click)="router.navigate(['/member-home', memberId])">Back</button>
-    </mat-card-actions>
-  </mat-card>
+        <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+          <div>
+            <label style="font-size:12px;color:#94a3b8;display:block;margin-bottom:4px">Hours completed</label>
+            <input type="number" [(ngModel)]="item.editHours" min="0"
+              style="background:#252d3d;color:#f1f5f9;border:1px solid #2e3a4e;
+                     padding:6px 10px;border-radius:6px;width:80px;font-size:14px" />
+          </div>
+          <div>
+            <label style="font-size:12px;color:#94a3b8;display:block;margin-bottom:4px">Status</label>
+            <select [(ngModel)]="item.editStatus"
+              style="background:#252d3d;color:#f1f5f9;border:1px solid #2e3a4e;
+                     padding:6px 10px;border-radius:6px;font-size:14px">
+              @for (s of statusOptions; track s.value) {
+                <option [value]="s.value">{{ s.label }}</option>
+              }
+            </select>
+          </div>
+          <div style="margin-top:18px">
+            <button (click)="saveProgress(item)" [disabled]="saving"
+              style="background:#3b82f6;color:#fff;border:none;padding:8px 20px;
+                     border-radius:6px;font-size:14px;cursor:pointer">
+              Save
+            </button>
+          </div>
+        </div>
+      </div>
+    }
+  }
 </div>

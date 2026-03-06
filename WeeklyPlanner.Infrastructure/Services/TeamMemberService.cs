@@ -32,7 +32,6 @@ public class TeamMemberService : ITeamMemberService
 
     public async Task<TeamMemberDto> CreateAsync(CreateTeamMemberRequest request)
     {
-        // Duplicate name check (case-insensitive)
         var exists = await _db.TeamMembers
             .AnyAsync(m => m.Name.ToLower() == request.Name.ToLower());
         if (exists)
@@ -44,7 +43,6 @@ public class TeamMemberService : ITeamMemberService
             IsLead = request.IsLead
         };
 
-        // If setting as lead, clear existing lead
         if (request.IsLead)
         {
             var current = await _db.TeamMembers.FirstOrDefaultAsync(m => m.IsLead);
@@ -74,7 +72,6 @@ public class TeamMemberService : ITeamMemberService
         var member = await _db.TeamMembers.FindAsync(id);
         if (member is null) return false;
 
-        // Clear existing lead
         var current = await _db.TeamMembers.FirstOrDefaultAsync(m => m.IsLead);
         if (current is not null) current.IsLead = false;
 
@@ -91,5 +88,12 @@ public class TeamMemberService : ITeamMemberService
         member.IsActive = !member.IsActive;
         await _db.SaveChangesAsync();
         return true;
+    }
+
+    public async Task ResetAllAsync()
+    {
+        var all = await _db.TeamMembers.ToListAsync();
+        _db.TeamMembers.RemoveRange(all);
+        await _db.SaveChangesAsync();
     }
 }

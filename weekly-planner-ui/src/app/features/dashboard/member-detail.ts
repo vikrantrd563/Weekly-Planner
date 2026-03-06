@@ -1,9 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { ProgressService } from '../../core/services/progress.service';
 import { MemberSummary } from '../../core/models';
@@ -11,11 +8,7 @@ import { MemberSummary } from '../../core/models';
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule, MatButtonModule,
-    MatProgressSpinnerModule, MatSnackBarModule
-  ],
+  imports: [CommonModule, MatSnackBarModule],
   templateUrl: './member-detail.html',
   styleUrl: './member-detail.scss'
 })
@@ -33,7 +26,6 @@ export class MemberDetail implements OnInit {
   ngOnInit() {
     this.weekId = this.route.snapshot.paramMap.get('weekId') ?? '';
     this.memberId = this.route.snapshot.paramMap.get('memberId') ?? '';
-
     this.progressService.getMemberSummary(this.weekId, this.memberId).subscribe({
       next: (data: MemberSummary) => {
         this.data = data;
@@ -51,7 +43,7 @@ export class MemberDetail implements OnInit {
       case 'Done': return '#81C784';
       case 'Blocked': return '#EF9A9A';
       case 'InProgress': return '#64B5F6';
-      default: return '#aaa';
+      default: return '#94a3b8';
     }
   }
 

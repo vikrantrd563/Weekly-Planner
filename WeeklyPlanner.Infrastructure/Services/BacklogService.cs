@@ -87,4 +87,11 @@ public class BacklogService : IBacklogService
         await _db.SaveChangesAsync();
         return true;
     }
+    public async Task<bool> ResetAllAsync()
+    {
+        var items = await _db.BacklogItems.ToListAsync();
+        _db.BacklogItems.RemoveRange(items);
+        await _db.SaveChangesAsync();
+        return true;
+    }
 }

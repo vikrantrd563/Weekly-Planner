@@ -2,13 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSelectModule } from '@angular/material/select';
-import { MatInputModule } from '@angular/material/input';
-import { MatChipsModule } from '@angular/material/chips';
 import { PlanningService } from '../../core/services/planning.service';
 import { WorkItemService } from '../../core/services/work-item.service';
 import { BacklogService } from '../../core/services/backlog.service';
@@ -20,13 +14,7 @@ import { PlanningWeek, WorkItem, BacklogItem } from '../../core/models';
   imports: [
     CommonModule,
     FormsModule,
-    MatCardModule,
-    MatButtonModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatSelectModule,
-    MatInputModule,
-    MatChipsModule
   ],
   templateUrl: './plan-my-work.html',
   styleUrl: './plan-my-work.scss'
@@ -47,13 +35,10 @@ export class PlanMyWork implements OnInit {
 
   loading = false;
   submitting = false;
+  showPicker = false;
 
   selectedBacklogId = '';
   committedHours = 4;
-
-  // ─────────────────────────────────────────────
-  // BUDGET CALCULATIONS
-  // ─────────────────────────────────────────────
 
   get totalCommitted(): number {
     return this.myWorkItems.reduce((s, w) => s + w.committedHours, 0);
@@ -99,10 +84,6 @@ export class PlanMyWork implements OnInit {
     return this.totalCommitted === 30;
   }
 
-  // ─────────────────────────────────────────────
-  // LIFECYCLE
-  // ─────────────────────────────────────────────
-
   ngOnInit(): void {
     this.memberId = this.route.snapshot.paramMap.get('memberId') ?? '';
     this.loading = true;
@@ -122,7 +103,6 @@ export class PlanMyWork implements OnInit {
 
   loadMyItems(): void {
     if (!this.week) return;
-
     this.workItemService.getByWeekAndMember(this.week.id, this.memberId)
       .subscribe({
         next: (items) => {
@@ -134,22 +114,13 @@ export class PlanMyWork implements OnInit {
 
   loadBacklog(): void {
     this.backlogService.getAll('available').subscribe({
-      next: (items) => {
-        this.availableBacklog = items;
-      }
+      next: (items) => { this.availableBacklog = items; }
     });
   }
 
-  // ─────────────────────────────────────────────
-  // ACTIONS
-  // ─────────────────────────────────────────────
-
   addItem(): void {
-    if (!this.week || !this.selectedBacklogId || this.committedHours < 1)
-      return;
-
+    if (!this.week || !this.selectedBacklogId || this.committedHours < 1) return;
     this.submitting = true;
-
     this.workItemService.add({
       planningWeekId: this.week.id,
       teamMemberId: this.memberId,
@@ -161,6 +132,7 @@ export class PlanMyWork implements OnInit {
         this.selectedBacklogId = '';
         this.committedHours = 4;
         this.submitting = false;
+        this.showPicker = false;
         this.loadMyItems();
       },
       error: (e: any) => {
@@ -184,7 +156,6 @@ export class PlanMyWork implements OnInit {
 
   markReady(): void {
     if (!this.week) return;
-
     this.workItemService.markReady(this.week.id, this.memberId)
       .subscribe({
         next: () => {
