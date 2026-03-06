@@ -10,4 +10,5 @@ public interface IBacklogService
     Task<BacklogItemDto> CreateAsync(CreateBacklogItemRequest request);
     Task<BacklogItemDto?> UpdateAsync(Guid id, UpdateBacklogItemRequest request);
     Task<bool> ArchiveAsync(Guid id);
+    Task<bool> ResetAllAsync();
 }

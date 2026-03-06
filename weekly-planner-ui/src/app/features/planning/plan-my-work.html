@@ -1,105 +1,225 @@
-<div class="page-container">
+<div class="page-container" style="padding-bottom:80px">
+
   @if (loading) {
-    <mat-spinner diameter="40" />
+    <div style="display:flex;justify-content:center;padding:60px">
+      <div style="color:#94a3b8">Loading...</div>
+    </div>
+
   } @else if (!week) {
-    <mat-card>
-      <mat-card-content>
-        <p>No active planning week. Ask your lead to set one up.</p>
-        <button mat-button (click)="router.navigate(['/'])">Go Home</button>
-      </mat-card-content>
-    </mat-card>
+    <div style="text-align:center;padding:60px;color:#94a3b8">
+      <div style="font-size:2rem;margin-bottom:12px">📅</div>
+      <p>No active planning week. Ask your lead to set one up.</p>
+      <button (click)="router.navigate(['/'])"
+        style="margin-top:16px;background:none;border:1px solid #334155;
+               color:#94a3b8;padding:8px 20px;border-radius:8px;cursor:pointer">
+        Go Home
+      </button>
+    </div>
+
   } @else {
-    <!-- Budget Overview -->
-    <mat-card style="margin-bottom:16px">
-      <mat-card-header>
-        <mat-card-title>My Planning — Week of {{ week.planningDate | date:'mediumDate' }}</mat-card-title>
-        <mat-card-subtitle>Total committed: {{ totalCommitted }}/30 hours</mat-card-subtitle>
-      </mat-card-header>
-      <mat-card-content>
-        <div style="display:flex;gap:24px;flex-wrap:wrap;margin-top:8px">
-          <div>
-            <span class="chip-client" style="padding:4px 8px;border-radius:4px">Client Focused</span>
-            <span style="margin-left:8px">{{ clientUsed }}/{{ clientBudget }}h</span>
+
+    <!-- HEADER -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+      <button (click)="router.navigate(['/member-home', memberId])"
+        style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px">
+        ← Home
+      </button>
+    </div>
+
+    <div style="margin-bottom:24px">
+      <h2 style="margin:0 0 4px 0;font-size:1.4rem;font-weight:700">📝 Plan My Work</h2>
+      <p style="margin:0;color:#94a3b8;font-size:0.9rem">
+        Pick backlog items and commit your 30 hours.
+      </p>
+    </div>
+
+    <!-- HOURS SUMMARY -->
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;
+                padding:20px;margin-bottom:20px">
+      <div style="display:flex;justify-content:space-between;align-items:center;
+                  flex-wrap:wrap;gap:12px">
+        <div>
+          <span style="font-size:1.1rem;font-weight:700">
+            Your hours: {{ totalCommitted }} of 30 planned.
+          </span>
+          <span style="color:#94a3b8;margin-left:8px;font-size:0.9rem">
+            {{ 30 - totalCommitted }} hours left.
+          </span>
+        </div>
+        @if (totalCommitted === 30) {
+          <span style="background:#16a34a;color:#fff;font-size:12px;font-weight:700;
+                       padding:4px 12px;border-radius:6px">
+            ✓ You marked yourself as ready
+          </span>
+        }
+      </div>
+
+      <!-- BUDGET TABLE -->
+      <div style="margin-top:16px;display:grid;
+                  grid-template-columns:1fr 1fr 1fr 1fr;gap:0;
+                  border:1px solid #2e3a4e;border-radius:8px;overflow:hidden">
+
+        <div style="background:#252d3d;padding:8px 12px;font-size:11px;
+                    color:#64748b;font-weight:600;text-transform:uppercase"></div>
+        <div style="background:#252d3d;padding:8px 12px;font-size:11px;
+                    color:#64748b;font-weight:600;text-transform:uppercase">Budget</div>
+        <div style="background:#252d3d;padding:8px 12px;font-size:11px;
+                    color:#64748b;font-weight:600;text-transform:uppercase">Claimed</div>
+        <div style="background:#252d3d;padding:8px 12px;font-size:11px;
+                    color:#64748b;font-weight:600;text-transform:uppercase">Left</div>
+
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e">
+          <span class="chip-client" style="padding:2px 8px;border-radius:4px;font-size:12px">Client</span>
+        </div>
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e;color:#94a3b8">{{ clientBudget }}h</div>
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e;color:#64B5F6">{{ clientUsed }}h</div>
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e"
+          [style.color]="clientBudget - clientUsed < 0 ? '#ef4444' : '#f1f5f9'">
+          {{ clientBudget - clientUsed }}h
+        </div>
+
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e">
+          <span class="chip-techdebt" style="padding:2px 8px;border-radius:4px;font-size:12px">Tech Debt</span>
+        </div>
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e;color:#94a3b8">{{ techBudget }}h</div>
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e;color:#FFB74D">{{ techUsed }}h</div>
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e"
+          [style.color]="techBudget - techUsed < 0 ? '#ef4444' : '#f1f5f9'">
+          {{ techBudget - techUsed }}h
+        </div>
+
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e">
+          <span class="chip-rnd" style="padding:2px 8px;border-radius:4px;font-size:12px">R&D</span>
+        </div>
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e;color:#94a3b8">{{ rndBudget }}h</div>
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e;color:#81C784">{{ rndUsed }}h</div>
+        <div style="padding:10px 12px;border-top:1px solid #2e3a4e"
+          [style.color]="rndBudget - rndUsed < 0 ? '#ef4444' : '#f1f5f9'">
+          {{ rndBudget - rndUsed }}h
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ADD ITEM -->
+    @if (!showPicker) {
+      <button (click)="showPicker = true"
+        style="width:100%;background:#1e2433;border:1px dashed #334155;color:#94a3b8;
+               padding:16px;border-radius:12px;cursor:pointer;font-size:0.95rem;
+               margin-bottom:20px;transition:border-color 0.2s"
+        onmouseenter="this.style.borderColor='#64748b';this.style.color='#f1f5f9'"
+        onmouseleave="this.style.borderColor='#334155';this.style.color='#94a3b8'">
+        + Add Work from Backlog
+      </button>
+    } @else {
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;
+                  padding:20px;margin-bottom:20px">
+        <h3 style="margin:0 0 16px 0;font-size:1rem;font-weight:600">
+          Pick a Backlog Item
+          <span style="font-size:0.85rem;font-weight:400;color:#94a3b8;margin-left:8px">
+            {{ 30 - totalCommitted }}h left to plan
+          </span>
+        </h3>
+
+        <div style="display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap">
+          <div style="flex:1;min-width:260px">
+            <label style="display:block;font-size:0.8rem;color:#94a3b8;margin-bottom:6px">
+              Backlog Item
+            </label>
+            <select [(ngModel)]="selectedBacklogId"
+              style="width:100%;background:#0f172a;border:1px solid #2e3a4e;
+                     color:#f1f5f9;padding:10px 12px;border-radius:8px;font-size:0.9rem">
+              <option value="">— Select an item —</option>
+              @for (item of availableBacklog; track item.id) {
+                <option [value]="item.id">
+                  {{ item.title }} ({{ item.category }}, {{ item.estimatedHours }}h est.)
+                </option>
+              }
+            </select>
           </div>
-          <div>
-            <span class="chip-techdebt" style="padding:4px 8px;border-radius:4px">Tech Debt</span>
-            <span style="margin-left:8px">{{ techUsed }}/{{ techBudget }}h</span>
-          </div>
-          <div>
-            <span class="chip-rnd" style="padding:4px 8px;border-radius:4px">R&D</span>
-            <span style="margin-left:8px">{{ rndUsed }}/{{ rndBudget }}h</span>
+
+          <div style="width:110px">
+            <label style="display:block;font-size:0.8rem;color:#94a3b8;margin-bottom:6px">
+              Hours to commit
+            </label>
+            <input type="number" [(ngModel)]="committedHours" min="1" max="30"
+              style="width:100%;background:#0f172a;border:1px solid #2e3a4e;
+                     color:#f1f5f9;padding:10px 12px;border-radius:8px;font-size:0.9rem"/>
           </div>
         </div>
-      </mat-card-content>
-    </mat-card>
 
-    <!-- Add Item -->
-    <mat-card style="margin-bottom:16px">
-      <mat-card-header>
-        <mat-card-title>Add Backlog Item</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin-top:8px">
-          <mat-form-field style="min-width:300px">
-            <mat-label>Select Backlog Item</mat-label>
-            <mat-select [(ngModel)]="selectedBacklogId">
-              @for (item of availableBacklog; track item.id) {
-                <mat-option [value]="item.id">
-                  {{ item.title }} ({{ item.category }}, {{ item.estimatedHours }}h est.)
-                </mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
-
-          <mat-form-field style="width:120px">
-            <mat-label>Hours</mat-label>
-            <input matInput type="number" [(ngModel)]="committedHours" min="1" max="30" />
-          </mat-form-field>
-
-          <button mat-raised-button color="primary"
+        <div style="display:flex;gap:10px;margin-top:16px">
+          <button (click)="addItem()"
             [disabled]="!selectedBacklogId || committedHours < 1 || submitting"
-            (click)="addItem()">
-            Add
+            style="background:#3b82f6;color:white;border:none;padding:10px 24px;
+                   border-radius:8px;cursor:pointer;font-weight:600;font-size:0.9rem">
+            Add to My Plan
+          </button>
+          <button (click)="showPicker = false"
+            style="background:none;border:1px solid #334155;color:#94a3b8;
+                   padding:10px 20px;border-radius:8px;cursor:pointer;font-size:0.9rem">
+            Cancel
           </button>
         </div>
-      </mat-card-content>
-    </mat-card>
+      </div>
+    }
 
-    <!-- My Items -->
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>My Committed Items</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        @if (myWorkItems.length === 0) {
-          <p style="color:#aaa">No items added yet. Add items above.</p>
-        } @else {
+    <!-- MY PLAN -->
+    <div style="background:#1e2433;border:1px solid #2e3a4e;
+                border-radius:12px;padding:20px;margin-bottom:24px">
+      <h3 style="margin:0 0 16px 0;font-size:1rem;font-weight:600">
+        My Plan
+        <span style="font-size:0.85rem;font-weight:400;color:#94a3b8;margin-left:8px">
+          {{ myWorkItems.length }} items
+        </span>
+      </h3>
+
+      @if (myWorkItems.length === 0) {
+        <p style="color:#94a3b8;text-align:center;padding:24px 0;margin:0;font-size:0.9rem">
+          You haven't picked any work yet. Click "Add Work from Backlog" to get started.
+        </p>
+      } @else {
+        <div style="display:flex;flex-direction:column;gap:8px">
           @for (item of myWorkItems; track item.id) {
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #333">
-              <div>
+            <div style="display:flex;justify-content:space-between;align-items:center;
+                        background:#252d3d;border:1px solid #2e3a4e;
+                        border-radius:8px;padding:12px 16px">
+              <div style="display:flex;align-items:center;gap:10px">
                 <span [class]="getCategoryClass(item.categoryId)"
-                  style="padding:2px 8px;border-radius:4px;font-size:12px;margin-right:8px">
+                  style="padding:2px 10px;border-radius:4px;font-size:11px;font-weight:600">
                   {{ item.category }}
                 </span>
-                <span>{{ item.backlogItemTitle }}</span>
+                <span style="font-size:0.9rem">{{ item.backlogItemTitle }}</span>
               </div>
               <div style="display:flex;align-items:center;gap:12px">
-                <span style="color:#aaa">{{ item.committedHours }}h</span>
-                <button mat-icon-button color="warn" (click)="removeItem(item.id)"
-                  style="font-size:12px">✕</button>
+                <span style="color:#94a3b8;font-size:0.85rem">{{ item.committedHours }}h</span>
+                <button (click)="removeItem(item.id)"
+                  style="background:none;border:1px solid #334155;color:#94a3b8;
+                         width:28px;height:28px;border-radius:6px;cursor:pointer;
+                         font-size:14px;display:flex;align-items:center;justify-content:center">
+                  ✕
+                </button>
               </div>
             </div>
           }
-        }
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="accent"
-          [disabled]="!canMarkReady"
-          (click)="markReady()">
-          ✓ Mark Ready ({{ totalCommitted }}/30h)
-        </button>
-        <button mat-button (click)="router.navigate(['/member-home', memberId])">Back</button>
-      </mat-card-actions>
-    </mat-card>
+        </div>
+      }
+    </div>
+
+    <!-- ACTIONS -->
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <button (click)="markReady()"
+        [disabled]="!canMarkReady"
+        style="background:#0ea5e9;color:white;border:none;padding:12px 28px;
+               border-radius:8px;cursor:pointer;font-weight:600;font-size:0.95rem">
+        ✓ Mark Ready ({{ totalCommitted }}/30h)
+      </button>
+      <button (click)="router.navigate(['/member-home', memberId])"
+        style="background:none;border:1px solid #334155;color:#94a3b8;
+               padding:12px 24px;border-radius:8px;cursor:pointer">
+        ← Back
+      </button>
+    </div>
+
   }
 </div>

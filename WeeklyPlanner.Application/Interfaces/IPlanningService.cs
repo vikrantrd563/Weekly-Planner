@@ -12,6 +12,7 @@ public interface IPlanningService
     Task<WeekSummaryDto> FreezeWeekAsync(Guid weekId);
     Task<WeekSummaryDto> CompleteWeekAsync(Guid weekId);
     Task<bool> CancelWeekAsync(Guid weekId);
+    Task<bool> ResetAllAsync();
 }
 
 public interface IWorkItemService

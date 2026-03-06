@@ -5,6 +5,7 @@ import { BacklogItem } from '../models';
 
 @Injectable({ providedIn: 'root' })
 export class BacklogService {
+
   private api = inject(ApiService);
   private base = '/BacklogItems';
 
@@ -21,7 +22,15 @@ export class BacklogService {
     return this.api.post<BacklogItem>(this.base, request);
   }
 
+  update(id: string, request: any): Observable<BacklogItem> {
+    return this.api.put<BacklogItem>(`${this.base}/${id}`, request);
+  }
+
   archive(id: string): Observable<void> {
-    return this.api.patch<void>(`${this.base}/${id}/archive`);
+    return this.api.patch<void>(`${this.base}/${id}/archive`, {});
+  }
+
+  seed(): Observable<{ message: string }> {
+    return this.api.post<{ message: string }>(`${this.base}/seed`, {});
   }
 }

@@ -1,0 +1,36 @@
+<div style="max-width:860px;margin:0 auto;padding:32px 24px;">
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px">
+    <button (click)="router.navigate(['/lead-home'])"
+      style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px">← Home</button>
+    <h2 style="margin:0;font-size:22px;font-weight:700;">Past Weeks</h2>
+  </div>
+
+  @if (loading) {
+    <p style="color:#94a3b8">Loading...</p>
+  } @else if (weeks.length === 0) {
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:24px;color:#94a3b8">
+      No past weeks yet.
+    </div>
+  } @else {
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;overflow:hidden">
+      @for (week of weeks; track week.id) {
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:16px;border-bottom:1px solid #2e3a4e">
+          <div>
+            <strong>Week of {{ week.planningDate | date:'mediumDate' }}</strong>
+            <div style="font-size:13px;color:#94a3b8;margin-top:4px">
+              {{ week.members.length }} members · Client {{ week.clientFocusedPct }}% · Tech {{ week.techDebtPct }}% · R&D {{ week.rndPct }}%
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:center">
+            <span [style.color]="getStatusColor(week.status)" style="font-size:13px;font-weight:600">{{ week.status }}</span>
+            <button (click)="viewDashboard(week.id)"
+              style="background:none;border:1px solid #2e3a4e;color:#94a3b8;padding:6px 14px;border-radius:6px;cursor:pointer;font-size:13px">
+              View Details →
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -6,16 +6,24 @@ public static class SeedData
 {
     public static void Seed(AppDbContext context)
     {
-        if (context.TeamMembers.Any()) return;
+        // Only seed team members if none exist
+        if (!context.TeamMembers.Any())
+        {
+            var lead = new TeamMember { Name = "Alice (Lead)", IsLead = true };
+            var bob  = new TeamMember { Name = "Bob" };
+            var cara = new TeamMember { Name = "Cara" };
+            var dan  = new TeamMember { Name = "Dan" };
+            context.TeamMembers.AddRange(lead, bob, cara, dan);
+            context.SaveChanges();
+        }
 
-        var lead = new TeamMember { Name = "Alice (Lead)", IsLead = true };
-        var bob  = new TeamMember { Name = "Bob" };
-        var cara = new TeamMember { Name = "Cara" };
-        var dan  = new TeamMember { Name = "Dan" };
+        // Get existing backlog titles to avoid duplicates
+        var existingTitles = context.BacklogItems
+            .Select(b => b.Title)
+            .ToHashSet();
 
-        context.TeamMembers.AddRange(lead, bob, cara, dan);
-
-        context.BacklogItems.AddRange(
+        var candidates = new List<BacklogItem>
+        {
             new BacklogItem
             {
                 Title = "Customer portal login redesign",
@@ -86,8 +94,14 @@ public static class SeedData
                 EstimatedHours = 4,
                 Description = "Real-time dashboard feasibility."
             }
-        );
+        };
 
-        context.SaveChanges();
+        var toAdd = candidates.Where(c => !existingTitles.Contains(c.Title)).ToList();
+
+        if (toAdd.Any())
+        {
+            context.BacklogItems.AddRange(toAdd);
+            context.SaveChanges();
+        }
     }
 }

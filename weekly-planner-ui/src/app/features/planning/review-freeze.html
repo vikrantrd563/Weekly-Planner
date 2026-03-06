@@ -1,127 +1,152 @@
-<div class="page-container" style="max-width:800px; margin:40px auto;">
+<div class="page-container main-content">
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
+    <button (click)="router.navigate(['/lead-home'])"
+      style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px">
+      ← Home
+    </button>
+  </div>
+
+  <div style="margin-bottom:28px">
+    <h2 style="margin:0 0 4px 0;font-size:1.4rem;font-weight:700">❄️ Review and Freeze the Plan</h2>
+    <p style="margin:0;color:#94a3b8;font-size:0.9rem">
+      Check everyone's hours and lock the plan.
+    </p>
+  </div>
 
   @if (loading) {
-    <div style="text-align:center; padding:60px;">
-      <mat-spinner style="margin:0 auto;"></mat-spinner>
+    <div style="text-align:center;padding:40px;color:#94a3b8">Loading...</div>
+  } @else if (week) {
+
+    <!-- WEEK STATUS BANNER -->
+    <div style="background:#252d3d;border:1px solid #2e3a4e;border-radius:10px;
+                padding:12px 16px;margin-bottom:24px;display:flex;
+                justify-content:space-between;align-items:center">
+      <span style="color:#94a3b8;font-size:0.9rem">
+        Week of <strong style="color:#f1f5f9">{{ week.planningDate | date:'MMMM d, y' }}</strong>
+      </span>
+      <span style="background:#334155;color:#94a3b8;font-size:12px;
+                   padding:3px 10px;border-radius:6px;font-weight:600">
+        {{ week.status }}
+      </span>
     </div>
-  }
 
-  @if (!loading && week) {
-    <mat-card style="padding:32px;">
-      
-      <h2>🔍 Review & Freeze Week</h2>
-      <p style="color:#aaa;">
-        Planning week of {{ week.planningDate | date:'MMMM d, y' }}
-        — Status: <strong>{{ week.status }}</strong>
-      </p>
+    <!-- CATEGORY SUMMARY -->
+    <div class="section-title">Category Summary</div>
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;
+                overflow:hidden;margin-bottom:24px">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr style="background:#252d3d">
+            <th style="padding:10px 16px;text-align:left;font-size:13px;color:#94a3b8">Category</th>
+            <th style="padding:10px 16px;text-align:right;font-size:13px;color:#94a3b8">Budget</th>
+            <th style="padding:10px 16px;text-align:right;font-size:13px;color:#94a3b8">Planned</th>
+            <th style="padding:10px 16px;text-align:right;font-size:13px;color:#94a3b8">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-top:1px solid #2e3a4e">
+            <td style="padding:10px 16px">
+              <span class="chip-client" style="padding:2px 8px;border-radius:4px">Client Focused</span>
+            </td>
+            <td style="padding:10px 16px;text-align:right;color:#94a3b8">{{ clientTotal }}h</td>
+            <td style="padding:10px 16px;text-align:right">{{ week.clientFocusedPct }}%</td>
+            <td style="padding:10px 16px;text-align:right">
+              <span style="color:#81C784;font-size:12px">✓</span>
+            </td>
+          </tr>
+          <tr style="border-top:1px solid #2e3a4e">
+            <td style="padding:10px 16px">
+              <span class="chip-techdebt" style="padding:2px 8px;border-radius:4px">Tech Debt</span>
+            </td>
+            <td style="padding:10px 16px;text-align:right;color:#94a3b8">{{ techTotal }}h</td>
+            <td style="padding:10px 16px;text-align:right">{{ week.techDebtPct }}%</td>
+            <td style="padding:10px 16px;text-align:right">
+              <span style="color:#81C784;font-size:12px">✓</span>
+            </td>
+          </tr>
+          <tr style="border-top:1px solid #2e3a4e">
+            <td style="padding:10px 16px">
+              <span class="chip-rnd" style="padding:2px 8px;border-radius:4px">R&D</span>
+            </td>
+            <td style="padding:10px 16px;text-align:right;color:#94a3b8">{{ rndTotal }}h</td>
+            <td style="padding:10px 16px;text-align:right">{{ rndPct }}%</td>
+            <td style="padding:10px 16px;text-align:right">
+              <span style="color:#81C784;font-size:12px">✓</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
-      <!-- Category Budgets -->
-      <mat-card style="padding:16px; margin-bottom:24px; background:#2a2a2a;">
-        <h3 style="margin:0 0 12px 0;">Category Budgets (per member)</h3>
-
-        <div style="display:flex; gap:24px; flex-wrap:wrap;">
-
-          <span class="chip-client" style="padding:6px 12px; border-radius:16px;">
-            Client Focused: {{ week.clientFocusedPct }}%
-            ({{ clientTotal / week.members.length | number:'1.0-0' }}h each)
-          </span>
-
-          <span class="chip-techdebt" style="padding:6px 12px; border-radius:16px;">
-            Tech Debt: {{ week.techDebtPct }}%
-            ({{ techTotal / week.members.length | number:'1.0-0' }}h each)
-          </span>
-
-          <span class="chip-rnd" style="padding:6px 12px; border-radius:16px;">
-            R&D: {{ week.rndPct }}%
-            ({{ rndTotal / week.members.length | number:'1.0-0' }}h each)
-          </span>
-
-        </div>
-      </mat-card>
-
-      <!-- Members -->
-      <h3>Team Members</h3>
-
-      <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:24px;">
-
-        @for (member of week.members; track member.memberId) {
-
-          <mat-card style="padding:16px; background:#2a2a2a;">
-
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-
-              <div>
-                <strong>{{ member.memberName }}</strong>
-
+    <!-- MEMBER SUMMARY -->
+    <div class="section-title">Member Summary</div>
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;
+                overflow:hidden;margin-bottom:24px">
+      <table style="width:100%;border-collapse:collapse">
+        <thead>
+          <tr style="background:#252d3d">
+            <th style="padding:10px 16px;text-align:left;font-size:13px;color:#94a3b8">Member</th>
+            <th style="padding:10px 16px;text-align:center;font-size:13px;color:#94a3b8">Status</th>
+            <th style="padding:10px 16px;text-align:right;font-size:13px;color:#94a3b8">Hours</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (member of week.members; track member.memberId) {
+            <tr style="border-top:1px solid #2e3a4e">
+              <td style="padding:10px 16px;font-weight:500">{{ member.memberName }}</td>
+              <td style="padding:10px 16px;text-align:center">
                 @if (member.isReady) {
-                  <span style="color:#81C784; margin-left:8px;">✅ Ready</span>
+                  <span style="background:rgba(129,199,132,0.15);color:#81C784;
+                               font-size:12px;font-weight:600;padding:2px 10px;border-radius:4px">
+                    ✓ Ready
+                  </span>
                 } @else {
-                  <span style="color:#BDBDBD; margin-left:8px;">⏳ Not Ready</span>
+                  <span style="background:rgba(148,163,184,0.1);color:#94a3b8;
+                               font-size:12px;padding:2px 10px;border-radius:4px">
+                    Not Ready
+                  </span>
                 }
-              </div>
-
-              <div style="text-align:right;">
-                <span [style.color]="member.totalCommitted === 30 ? '#81C784' : '#EF9A9A'">
-                  {{ member.totalCommitted }}/30h
-                </span>
-              </div>
-
-            </div>
-
-            <div style="margin-top:8px; font-size:13px; color:#aaa;">
-              Client: {{ member.clientFocusedBudget }}h &nbsp;|&nbsp;
-              Tech Debt: {{ member.techDebtBudget }}h &nbsp;|&nbsp;
-              R&D: {{ member.rndBudget }}h
-            </div>
-
-          </mat-card>
-
-        }
-
-      </div>
-
-      <!-- Validation -->
-      @if (!canFreeze) {
-        <mat-card style="padding:16px;
-                         background:rgba(244,67,54,0.1);
-                         border:1px solid #EF9A9A;
-                         margin-bottom:16px;">
-          <p style="color:#EF9A9A; margin:0;">
-            ⚠️ Cannot freeze yet — all members must have exactly 30h planned.
-          </p>
-        </mat-card>
-      }
-
-      <!-- Actions -->
-      <div style="display:flex; gap:12px; margin-top:8px;">
-
-        <button mat-raised-button
-                color="primary"
-                [disabled]="!canFreeze || freezing"
-                (click)="freeze()">
-
-          @if (freezing) {
-            Freezing...
-          } @else {
-            🔒 Freeze Week
+              </td>
+              <td style="padding:10px 16px;text-align:right;font-weight:600"
+                [style.color]="member.totalCommitted === 30 ? '#81C784' : '#f87171'">
+                {{ member.totalCommitted }}/30h
+              </td>
+            </tr>
           }
+        </tbody>
+      </table>
+    </div>
 
-        </button>
-
-        <button mat-stroked-button
-                color="warn"
-                (click)="cancel()">
-          ❌ Cancel Week
-        </button>
-
-        <button mat-button
-                (click)="router.navigate(['/lead-home'])">
-          ← Back
-        </button>
-
+    <!-- STATUS BANNER -->
+    @if (!canFreeze) {
+      <div style="background:rgba(248,113,113,0.1);border:1px solid rgba(248,113,113,0.3);
+                  border-radius:8px;padding:14px 16px;margin-bottom:20px;
+                  color:#f87171;font-size:0.9rem">
+        ⚠️ Can't freeze yet — all members must have exactly 30h planned.
       </div>
+    } @else {
+      <div style="background:rgba(129,199,132,0.1);border:1px solid rgba(129,199,132,0.3);
+                  border-radius:8px;padding:14px 16px;margin-bottom:20px;
+                  color:#81C784;font-size:0.9rem">
+        🎉 Everything looks good! You can freeze the plan.
+      </div>
+    }
 
-    </mat-card>
+    <!-- ACTIONS -->
+    <div style="display:flex;gap:12px">
+      <button (click)="freeze()" [disabled]="!canFreeze || freezing"
+        style="background:#0ea5e9;color:#fff;border:none;padding:12px 28px;
+               border-radius:8px;font-size:0.95rem;font-weight:700;cursor:pointer"
+        [style.opacity]="canFreeze && !freezing ? '1' : '0.5'">
+        {{ freezing ? 'Freezing...' : '❄️ Freeze the Plan' }}
+      </button>
+      <button (click)="cancel()"
+        style="background:none;border:1px solid #ef4444;color:#f87171;
+               padding:12px 24px;border-radius:8px;font-size:0.9rem;cursor:pointer">
+        🗑️ Cancel Planning
+      </button>
+    </div>
+
   }
-
 </div>

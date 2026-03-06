@@ -1,0 +1,80 @@
+<div style="max-width:800px;margin:40px auto;padding:0 24px;">
+
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:24px;">
+    <button (click)="router.navigate(['/dashboard', weekId])"
+      style="background:none;border:none;color:#94a3b8;cursor:pointer;font-size:14px;">
+      Back to Dashboard
+    </button>
+  </div>
+
+  @if (loading) {
+    <p style="color:#94a3b8;">Loading...</p>
+  } @else if (data) {
+
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:24px;margin-bottom:24px;">
+      <h2 style="margin:0 0 4px 0;">{{ data.memberName }}</h2>
+      <p style="color:#94a3b8;margin:0;">Member progress summary</p>
+    </div>
+
+    <!-- Stat Boxes -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:24px;">
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#64B5F6;">{{ data.committedHours }}h</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Committed</div>
+      </div>
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#81C784;">{{ data.completedHours }}h</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Completed</div>
+      </div>
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;"
+          [style.color]="getCompletionColor(data.completionPct)">
+          {{ data.completionPct | number:'1.0-0' }}%
+        </div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Complete</div>
+      </div>
+      <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;padding:16px;text-align:center;">
+        <div style="font-size:24px;font-weight:700;color:#f1f5f9;">{{ data.tasks?.length ?? 0 }}</div>
+        <div style="font-size:12px;color:#94a3b8;margin-top:4px;">Tasks</div>
+      </div>
+    </div>
+
+    <!-- Task Table -->
+    <div style="font-size:13px;font-weight:600;color:#64748b;text-transform:uppercase;
+                letter-spacing:0.05em;margin-bottom:12px;">Tasks</div>
+    <div style="background:#1e2433;border:1px solid #2e3a4e;border-radius:12px;overflow:hidden;">
+      <table style="width:100%;border-collapse:collapse;">
+        <thead>
+          <tr style="background:#252d3d;">
+            <th style="padding:10px 16px;text-align:left;font-size:13px;color:#94a3b8;">Task</th>
+            <th style="padding:10px 16px;text-align:left;font-size:13px;color:#94a3b8;">Category</th>
+            <th style="padding:10px 16px;text-align:right;font-size:13px;color:#94a3b8;">Committed</th>
+            <th style="padding:10px 16px;text-align:right;font-size:13px;color:#94a3b8;">Completed</th>
+            <th style="padding:10px 16px;text-align:center;font-size:13px;color:#94a3b8;">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (task of data.tasks; track task.workItemId) {
+            <tr style="border-top:1px solid #2e3a4e;">
+              <td style="padding:10px 16px;font-weight:500;">{{ task.backlogItemTitle }}</td>
+              <td style="padding:10px 16px;">
+                <span [class]="getCategoryClass(task.category)"
+                  style="padding:2px 8px;border-radius:4px;font-size:12px;">
+                  {{ task.category }}
+                </span>
+              </td>
+              <td style="padding:10px 16px;text-align:right;">{{ task.committedHours }}h</td>
+              <td style="padding:10px 16px;text-align:right;">{{ task.completedHours }}h</td>
+              <td style="padding:10px 16px;text-align:center;">
+                <span [style.color]="getStatusColor(task.status)" style="font-size:13px;">
+                  {{ task.status }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+  }
+</div>

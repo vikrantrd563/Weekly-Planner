@@ -42,7 +42,7 @@ export interface PlanningWeek {
   statusId: number;
   clientFocusedPct: number;
   techDebtPct: number;
-  rndPct: number; // ✅ clean name
+  rndPct: number;
   createdAt: string;
   members: PlanningWeekMemberInfo[];
 }
@@ -51,11 +51,9 @@ export interface PlanningWeekMemberInfo {
   memberId: string;
   memberName: string;
   isReady: boolean;
-
   clientFocusedBudget: number;
   techDebtBudget: number;
-  rndBudget: number; // ✅ clean name
-
+  rndBudget: number;
   totalCommitted: number;
 }
 
@@ -121,6 +119,15 @@ export interface TeamDashboard {
   memberSummaries: MemberSummary[];
 }
 
+export interface TaskDetail {
+  workItemId: string;
+  backlogItemTitle: string;
+  category: string;
+  committedHours: number;
+  completedHours: number;
+  status: string;
+}
+
 export interface CategorySummary {
   category: string;
   categoryId: number;
@@ -129,6 +136,7 @@ export interface CategorySummary {
   completionPct: number;
   taskCount: number;
   doneCount: number;
+  tasks: TaskDetail[];
 }
 
 export interface MemberSummary {
@@ -140,4 +148,5 @@ export interface MemberSummary {
   tasksDone: number;
   tasksBlocked: number;
   totalTasks: number;
+  tasks: TaskDetail[];
 }

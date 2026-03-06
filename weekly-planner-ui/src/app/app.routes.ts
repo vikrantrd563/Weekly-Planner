@@ -21,7 +21,7 @@ export const routes: Routes = [
     path: 'backlog',
     loadComponent: () => import('./features/backlog/backlog').then(m => m.Backlog)
   },
- {
+  {
     path: 'week/setup',
     loadComponent: () => import('./features/planning/week-setup').then(m => m.WeekSetup)
   },
@@ -32,6 +32,26 @@ export const routes: Routes = [
   {
     path: 'week/review',
     loadComponent: () => import('./features/planning/review-freeze').then(m => m.ReviewFreeze)
+  },
+  {
+    path: 'progress/:memberId',
+    loadComponent: () => import('./features/progress/update-progress').then(m => m.UpdateProgress)
+  },
+  {
+    path: 'dashboard/:weekId',
+    loadComponent: () => import('./features/dashboard/dashboard').then(m => m.Dashboard)
+  },
+  {
+    path: 'dashboard/:weekId/category/:categoryId',
+    loadComponent: () => import('./features/dashboard/category-detail').then(m => m.CategoryDetail)
+  },
+  {
+    path: 'dashboard/:weekId/member/:memberId',
+    loadComponent: () => import('./features/dashboard/member-detail').then(m => m.MemberDetail)
+  },
+  {
+    path: 'past-weeks',
+    loadComponent: () => import('./features/history/past-weeks').then(m => m.PastWeeks)
   },
   {
     path: '**',

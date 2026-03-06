@@ -86,4 +86,10 @@ public class PlanningWeeksController : ControllerBase
             return BadRequest(new { message = ex.Message });
         }
     }
+    [HttpDelete("reset-all")]
+    public async Task<IActionResult> ResetAll()
+    {
+        var success = await _planning.ResetAllAsync();
+        return success ? Ok() : StatusCode(500);
+    }
 }

@@ -62,4 +62,12 @@ public class TeamMembersController : ControllerBase
         var success = await _service.ToggleActiveAsync(id);
         return success ? Ok() : NotFound();
     }
+
+    /// <summary>Delete all team members (full reset)</summary>
+    [HttpDelete("reset-all")]
+    public async Task<IActionResult> ResetAll()
+    {
+        await _service.ResetAllAsync();
+        return NoContent();
+    }
 }

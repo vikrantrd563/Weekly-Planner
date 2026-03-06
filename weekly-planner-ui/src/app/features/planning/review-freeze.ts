@@ -1,11 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatIconModule } from '@angular/material/icon';
 import { PlanningService } from '../../core/services/planning.service';
 import { UserSessionService } from '../../core/services/user-session.service';
 import { PlanningWeek } from '../../core/models';
@@ -13,14 +9,7 @@ import { PlanningWeek } from '../../core/models';
 @Component({
   selector: 'app-review-freeze',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatSnackBarModule,
-    MatProgressSpinnerModule,
-    MatIconModule
-  ],
+  imports: [CommonModule, MatSnackBarModule],
   templateUrl: './review-freeze.html',
   styleUrl: './review-freeze.scss'
 })
@@ -80,9 +69,7 @@ export class ReviewFreeze implements OnInit {
 
   freeze(): void {
     if (!this.week) return;
-
     this.freezing = true;
-
     this.planningService.freeze(this.week.id).subscribe({
       next: () => {
         this.snackBar.open('Week frozen! Planning is locked.', 'Close', { duration: 3000 });
@@ -97,10 +84,7 @@ export class ReviewFreeze implements OnInit {
 
   cancel(): void {
     if (!this.week) return;
-
-    if (!confirm('Cancel this planning week? All work items will be deleted.'))
-      return;
-
+    if (!confirm('Cancel this planning week? All work items will be deleted.')) return;
     this.planningService.cancel(this.week.id).subscribe({
       next: () => {
         this.snackBar.open('Week cancelled', 'Close', { duration: 3000 });
