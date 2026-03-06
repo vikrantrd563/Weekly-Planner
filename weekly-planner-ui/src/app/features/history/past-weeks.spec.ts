@@ -1,23 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { PastWeeks } from './past-weeks';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('PastWeeks', () => {
-  let component: PastWeeks;
-  let fixture: ComponentFixture<PastWeeks>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PastWeeks]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(PastWeeks);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      imports: [PastWeeks],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
+    }).compileComponents();
   });
 
+  afterEach(() => { TestBed.resetTestingModule(); });
+
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = TestBed.createComponent(PastWeeks);
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

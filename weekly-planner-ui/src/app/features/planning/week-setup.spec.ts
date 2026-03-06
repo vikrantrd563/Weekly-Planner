@@ -1,23 +1,25 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
 import { WeekSetup } from './week-setup';
+import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('WeekSetup', () => {
-  let component: WeekSetup;
-  let fixture: ComponentFixture<WeekSetup>;
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WeekSetup]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(WeekSetup);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      imports: [WeekSetup],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
+    }).compileComponents();
   });
 
+  afterEach(() => { TestBed.resetTestingModule(); });
+
   it('should create', () => {
-    expect(component).toBeTruthy();
+    const fixture = TestBed.createComponent(WeekSetup);
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

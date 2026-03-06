@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
+import { UpdateProgress } from "./update-progress";
+import { provideRouter } from "@angular/router";
+import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 
-import { UpdateProgress } from './update-progress';
-
-describe('UpdateProgress', () => {
-  let component: UpdateProgress;
-  let fixture: ComponentFixture<UpdateProgress>;
-
+describe("UpdateProgress", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UpdateProgress]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(UpdateProgress);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      imports: [UpdateProgress],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
+    }).compileComponents();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it("should create", () => {
+    const fixture = TestBed.createComponent(UpdateProgress);
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });

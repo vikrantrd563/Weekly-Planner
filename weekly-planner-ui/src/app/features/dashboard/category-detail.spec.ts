@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from "@angular/core/testing";
+import { CategoryDetail } from "./category-detail";
+import { provideRouter } from "@angular/router";
+import { provideHttpClient } from "@angular/common/http";
+import { provideHttpClientTesting } from "@angular/common/http/testing";
 
-import { CategoryDetail } from './category-detail';
-
-describe('CategoryDetail', () => {
-  let component: CategoryDetail;
-  let fixture: ComponentFixture<CategoryDetail>;
-
+describe("CategoryDetail", () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CategoryDetail]
-    })
-    .compileComponents();
-
-    fixture = TestBed.createComponent(CategoryDetail);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+      imports: [CategoryDetail],
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+      ],
+    }).compileComponents();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it("should create", () => {
+    const fixture = TestBed.createComponent(CategoryDetail);
+    expect(fixture.componentInstance).toBeTruthy();
   });
 });
