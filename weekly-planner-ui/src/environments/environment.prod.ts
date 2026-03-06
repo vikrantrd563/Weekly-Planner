@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'YOUR_RAILWAY_API_URL/api'
+  apiUrl: 'https://weekly-planner-api-vikrant-dpczdfbhe9aphkfj.centralindia-01.azurewebsites.net/api'
 };
