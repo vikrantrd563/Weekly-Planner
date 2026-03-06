@@ -24,12 +24,14 @@ builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 // ── CORS ──────────────────────────────────────────────────
+var allowedOrigins = builder.Configuration["AllowedOrigins"]?.Split(',') 
+    ?? Array.Empty<string>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAngular", policy =>
         policy.WithOrigins(
-            "http://localhost:4200",
-            builder.Configuration["AllowedOrigins"] ?? "http://localhost:4200"
+            ["http://localhost:4200", ..allowedOrigins]
         )
         .AllowAnyMethod()
         .AllowAnyHeader());
