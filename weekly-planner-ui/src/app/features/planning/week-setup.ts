@@ -2,12 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatSliderModule } from '@angular/material/slider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { TeamMemberService } from '../../core/services/team-member.service';
 import { PlanningService } from '../../core/services/planning.service';
 import { TeamMember } from '../../core/models';
@@ -15,11 +10,7 @@ import { TeamMember } from '../../core/models';
 @Component({
   selector: 'app-week-setup',
   standalone: true,
-  imports: [
-    CommonModule, FormsModule,
-    MatCardModule, MatButtonModule, MatCheckboxModule,
-    MatSliderModule, MatSnackBarModule, MatProgressSpinnerModule
-  ],
+  imports: [CommonModule, FormsModule, MatSnackBarModule],
   templateUrl: './week-setup.html',
   styleUrl: './week-setup.scss'
 })
