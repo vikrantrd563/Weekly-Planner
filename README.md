@@ -8,9 +8,9 @@
 
 | | URL |
 |---|---|
-| 🖥️ **Frontend** | [https://weekly-planner-ui.vercel.app](https://weekly-planner-ui.vercel.app) |
-| 🔗 **API** | [https://weekly-planner-api-vikrant-dpczdfbhe9aphkfj.centralindia-01.azurewebsites.net](https://weekly-planner-api-vikrant-dpczdfbhe9aphkfj.centralindia-01.azurewebsites.net) |
-| 📖 **Swagger** | [/swagger](https://weekly-planner-api-vikrant-dpczdfbhe9aphkfj.centralindia-01.azurewebsites.net/swagger) |
+| 🖥️ **Frontend** | [https://icy-river-020b19200.2.azurestaticapps.net](https://icy-river-020b19200.2.azurestaticapps.net) |
+| 🔗 **API** | [https://weekly-planner-api-vrd-c7e6ewbsamfragfp.eastasia-01.azurewebsites.net](https://weekly-planner-api-vrd-c7e6ewbsamfragfp.eastasia-01.azurewebsites.net) |
+| 📖 **Swagger** | [/swagger](https://weekly-planner-api-vrd-c7e6ewbsamfragfp.eastasia-01.azurewebsites.net/swagger) |
 
 ---
 
@@ -37,24 +37,23 @@ The app provides a real-time dashboard with KPIs, category breakdowns, member-le
 | **HTTP** | Angular HttpClient |
 | **Backend Tests** | xUnit, FluentAssertions, Moq |
 | **Frontend Tests** | Vitest v4, Angular Testing Library |
-| **Backend Hosting** | Azure App Service (F1, Windows) |
-| **Frontend Hosting** | Vercel |
+| **Backend Hosting** | Azure App Service (F1, Windows, East Asia) |
+| **Frontend Hosting** | Azure Static Web Apps (Free, East Asia) |
 | **CI/CD** | GitHub Actions |
 | **Containerisation** | Docker |
 
 ---
 
 ## 🏗️ Architecture
-
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                    Angular 21 SPA                        │
-│              (Vercel — weekly-planner-ui)                │
+│         (Azure Static Web Apps — East Asia)              │
 └────────────────────────┬────────────────────────────────┘
                          │ HTTPS REST (JSON)
 ┌────────────────────────▼────────────────────────────────┐
 │               ASP.NET Core Web API (.NET 10)             │
-│           (Azure App Service — Central India)            │
+│           (Azure App Service — East Asia)                │
 │                                                          │
 │  Controllers → Services (Application layer)             │
 │       ↓                                                  │
@@ -71,7 +70,6 @@ Layers:
 ---
 
 ## 📁 Project Structure
-
 ```
 Weekly-Planner/
 ├── WeeklyPlanner.Application/
@@ -231,29 +229,26 @@ npx vitest run --coverage
 ## ⚙️ CI/CD Pipeline
 
 The project uses **GitHub Actions** for continuous deployment.
-
 ```
 git push to main
       ↓
 GitHub Actions triggered
       ↓
-  ┌───────────────────────┐
-  │  Build .NET 10 app    │
-  │  Publish to Azure     │
-  │  App Service          │
-  └───────────────────────┘
+  ┌───────────────────────────────────────┐
+  │  Build .NET 10 app                    │
+  │  Deploy to Azure App Service          │
+  │                                       │
+  │  Build Angular 21 app                 │
+  │  Deploy to Azure Static Web Apps      │
+  └───────────────────────────────────────┘
       ↓
-Azure App Service auto-restarts
+Both services auto-update
 with new deployment
 ```
 
-**Workflow file:** `.github/workflows/main_weekly-planner-api-vikrant.yml`
-
-Frontend (Vercel) is deployed manually via:
-```bash
-ng build --configuration production
-npx vercel deploy --prod
-```
+**Workflow files:**
+- `.github/workflows/main_weekly-planner-api-vrd.yml` — Backend
+- `.github/workflows/azure-static-web-apps-icy-river-020b19200.yml` — Frontend
 
 ---
 
@@ -303,7 +298,6 @@ Allowed origins are read from Azure App Settings (`AllowedOrigins`), keeping pro
 ---
 
 ## 🐳 Docker
-
 ```bash
 # Build
 docker build -t weekly-planner-api .
