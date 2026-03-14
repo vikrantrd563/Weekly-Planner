@@ -254,7 +254,7 @@ export class AppComponent {
   loadError = '';
   loadRestoring = false;
 
-  private readonly API = 'https://weekly-planner-api-vrd-c7e6ewbsamfragfp.eastasia-01.azurewebsites.net/api';
+  private readonly API = 'https://weekly-planner-api-vrd-c7e6ewbsamfragfp.eastasia-01.azurewebsites.net';
 
   switchRole() {
     this.session.clearUser();
